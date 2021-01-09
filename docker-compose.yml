@@ -12,7 +12,7 @@ services:
             - db_data:/var/lib/postgresql/data
             - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
     core:
-        image: "devalone/proxy_py:latest"
+        build: "github.com/feeeek/proxy_py#my"
         command: ./run.sh
         restart: always
         ports:
