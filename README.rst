@@ -32,7 +32,7 @@ There is a prepared docker image.
 
 .. code-block:: bash
 
-   wget "https://raw.githubusercontent.com/DevAlone/proxy_py/master/docker-compose.yml"
+   wget "https://raw.githubusercontent.com/feeeek/proxy_py/my/docker-compose.yml"
 
 2 Create a container
 
