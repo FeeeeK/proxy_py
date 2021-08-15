@@ -10,10 +10,8 @@ WORKDIR /proxy_py
 RUN echo "Building proxy_py..."
 
 COPY . /proxy_py/
-RUN python3 -m venv env
 RUN cp config_examples/settings.py proxy_py/settings.py
 RUN echo "Installing dependencies..."
-RUN source ./env/bin/activate
-RUN pip3 install -r requirements.txt --no-cache-dir
+RUN pip install -r requirements.txt --no-cache-dir
 
 EXPOSE 55555
