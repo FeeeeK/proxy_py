@@ -1,7 +1,7 @@
 aiohttp
-aiohttp-jinja2==0.16.0
-aiosocks==0.2.6
-lxml==4.3.1
+aiohttp-jinja2
+aiosocks @ https://github.com/nibrag/aiosocks/archive/refs/heads/master.zip
+lxml
 fake-useragent
 jinja2
 peewee-async==0.5.12
