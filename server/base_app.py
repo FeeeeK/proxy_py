@@ -20,6 +20,7 @@ class BaseApp:
         """Call it before anything else"""
         await self.setup_router()
         await self.setup_middlewares()
+        return self._app
 
     @abc.abstractmethod
     async def setup_router(self):

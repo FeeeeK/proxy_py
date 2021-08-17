@@ -1,9 +1,5 @@
 FROM python:3.8-slim
 
-RUN apt-get update \
-    && apt-get install -y wget unzip libxml2 libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /proxy_py
 
 RUN echo "Building proxy_py..."

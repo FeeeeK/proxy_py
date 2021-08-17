@@ -88,16 +88,16 @@ class BaseChecker:
         try:
             return await self._request(proxy_address, timeout)
         except (
-            aiohttp.client_exceptions.ServerDisconnectedError,
-            aiohttp.client_exceptions.ClientHttpProxyError,
-            aiohttp.client_exceptions.ClientProxyConnectionError,
-            aiohttp.client_exceptions.ClientResponseError,
-            aiohttp.client_exceptions.ClientPayloadError,
+            aiohttp.ServerDisconnectedError,
+            aiohttp.ClientHttpProxyError,
+            aiohttp.ClientProxyConnectionError,
+            aiohttp.ClientResponseError,
+            aiohttp.ClientPayloadError,
             aiosocks.errors.SocksError,
             aiosocks.SocksError,
             asyncio.TimeoutError,
             ssl.CertificateError,
-            aiohttp.client_exceptions.ClientOSError,
+            aiohttp.ClientOSError,
         ) as ex:
             message = str(ex).lower()
 

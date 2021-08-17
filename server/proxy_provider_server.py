@@ -32,9 +32,7 @@ class ProxyProviderServer(BaseApp):
         self._request_number = 0
 
     def start(self, loop):
-        loop.run_until_complete(self.init())
-
-        return web.run_app(self._app, host=self.host, port=self.port, loop=loop)
+        return web.run_app(self.init(), host=self.host, port=self.port)
 
     async def setup_router(self):
         api_v1_app = ApiV1App(logger=self.logger)
@@ -83,7 +81,7 @@ class ProxyProviderServer(BaseApp):
         try:
             response = await handler(request)
             status_code = response.status
-        except web.web_exceptions.HTTPException as ex:
+        except web.HTTPException as ex:
             status_code = ex.status
             exc = ex
             raise ex
