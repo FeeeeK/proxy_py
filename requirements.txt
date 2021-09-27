@@ -2,7 +2,7 @@ aiohttp
 aiohttp-jinja2
 aiosocks @ https://github.com/nibrag/aiosocks/archive/refs/heads/master.zip
 lxml
-fake-useragent
+fake-useragent @ https://github.com/Jordan9675/fake-useragent/archive/refs/heads/master.zip
 jinja2
 peewee-async==0.5.12
 aiopg==0.16.0
