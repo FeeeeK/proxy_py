@@ -67,5 +67,5 @@ class CollectorSocksList(BaseCollectorPremProxyCom):
 
     def __init__(self):
         super(CollectorSocksList, self).__init__(
-            "https://premproxy.com/socks-list/", 20
+            "https://premproxy.com/socks-list/", 17
         )
