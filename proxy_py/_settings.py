@@ -31,7 +31,7 @@ DATABASE_CONNECTION_KWARGS = {
     "database": "proxy_py",
     "user": "proxy_py",
     "password": "proxy_py",
-    "max_connections": 20,
+    "max_connections": 200,
 }
 
 DB_MAX_DOMAIN_LENGTH = 128
@@ -50,7 +50,7 @@ COLLECTORS_DIRS = [
     # 'local/collectors',  # use to add your own collectors
 ]
 
-NUMBER_OF_CONCURRENT_TASKS = 128
+NUMBER_OF_CONCURRENT_TASKS = 256
 # makes aiohttp to not send more
 # than this number of simultaneous requests
 # works by common connector
@@ -58,20 +58,20 @@ NUMBER_OF_SIMULTANEOUS_REQUESTS = 128
 # the same, but per host
 NUMBER_OF_SIMULTANEOUS_REQUESTS_PER_HOST = NUMBER_OF_SIMULTANEOUS_REQUESTS
 
-MIN_PROXY_CHECKING_PERIOD = 10 * 60
-MAX_PROXY_CHECKING_PERIOD = 30 * 60
+MIN_PROXY_CHECKING_PERIOD = 2 * 60
+MAX_PROXY_CHECKING_PERIOD = 10 * 60
 BAD_PROXY_CHECKING_PERIOD = MAX_PROXY_CHECKING_PERIOD * 2
 DEAD_PROXY_THRESHOLD = 12
 DEAD_PROXY_CHECKING_PERIOD = 1 * 24 * 60 * 60
 DO_NOT_CHECK_ON_N_BAD_CHECKS = DEAD_PROXY_THRESHOLD + 14
 # how many seconds to wait for response from proxy
-PROXY_CHECKING_TIMEOUT = 30
+PROXY_CHECKING_TIMEOUT = 5
 # do not check proxy from collector if it has been checked recently
 PROXY_NOT_CHECKING_PERIOD = 15 * 60
 # limiter for maximum number of proxies gotten from collector
 # to fix potential issue with collectors' spamming
 COLLECTOR_MAXIMUM_NUMBER_OF_PROXIES_PER_REQUEST = 2 * 65536
-SLEEP_AFTER_ERROR_PERIOD = 10
+SLEEP_AFTER_ERROR_PERIOD = 2
 # how many collectors to process concurrently
 NUMBER_OF_CONCURRENT_COLLECTORS = 1
 
@@ -156,15 +156,10 @@ Loading from the environment
 def load_settings_from_environment():
     for key, val in globals().items():
         # filter only variables with capital letters or digits or undescore
-        rest = "".join(
-            [
-                ch
-                for ch in key
-                if ch not in string.ascii_uppercase
-                and ch not in string.digits
-                and ch != "_"
-            ]
-        )
+        rest = "".join(ch for ch in key
+                        if ch not in string.ascii_uppercase
+                        and ch not in string.digits
+                        and ch != "_")
         if len(rest) > 0:
             continue
 
@@ -175,8 +170,10 @@ def load_settings_from_environment():
                 globals()[key] = ast.literal_eval(env_value)
             except:
                 raise Exception(
-                    f"An error happened during parsing environment value. "
-                    + f"Key = {env_key}, Value = {env_value}"
+                    (
+                        'An error happened during parsing environment value. '
+                        + f"Key = {env_key}, Value = {env_value}"
+                    )
                 )
 
 

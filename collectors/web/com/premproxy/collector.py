@@ -16,7 +16,7 @@ class BaseCollectorPremProxyCom(PagesCollector):
     async def process_page(self, page_index):
         result = []
 
-        url = self.url + "%02d.htm" % (page_index + 1)
+        url = self.url + "time-%02d.htm" % (page_index + 1)
 
         resp = await async_requests.get(url=url)
         html = resp.text
@@ -59,7 +59,7 @@ class Collector(BaseCollectorPremProxyCom):
     __collector__ = True
 
     def __init__(self):
-        super(Collector, self).__init__("https://premproxy.com/list/", 20)
+        super(Collector, self).__init__("https://premproxy.com/list/", 13)
 
 
 class CollectorSocksList(BaseCollectorPremProxyCom):
