@@ -221,7 +221,7 @@ ProcessorProxiesQueueSize.create_table(_silent)
 db = peewee_async.Manager(raw_db)
 
 raw_db.execute_sql(
-    """CREATE MATERIALIZED VIEW IF NOT EXISTS working_proxies 
-AS SELECT * FROM proxies WHERE number_of_bad_checks = 0;"""
+    "CREATE MATERIALIZED VIEW IF NOT EXISTS working_proxies "
+    "AS SELECT * FROM proxies WHERE number_of_bad_checks = 0;"
 )
 db.allow_sync()

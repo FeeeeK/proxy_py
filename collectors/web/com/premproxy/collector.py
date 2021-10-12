@@ -12,17 +12,20 @@ class BaseCollectorPremProxyCom(PagesCollector):
         super(BaseCollectorPremProxyCom, self).__init__()
         self.url = url
         self.pages_count = pages_count
+        self.dynamic_pages_count = False
 
     async def process_page(self, page_index):
         result = []
-
         url = self.url + "time-%02d.htm" % (page_index + 1)
-
         resp = await async_requests.get(url=url)
         html = resp.text
         tree = lxml.html.fromstring(html)
         elements = tree.xpath(".//td[starts-with(@data-label, 'IP:port')]")
-
+        self.pages_count = len(
+            tree.xpath(
+                r'//*[@id="navbar"][1]/ul/li/a[not(contains(text(), "prev") or contains(text(), "next"))]'
+            )
+        )
         code_table_url = re.findall(r'script src="(/js(-socks)?/.+?\.js)', html)[0][0]
 
         code_table = (
@@ -59,7 +62,7 @@ class Collector(BaseCollectorPremProxyCom):
     __collector__ = True
 
     def __init__(self):
-        super(Collector, self).__init__("https://premproxy.com/list/", 13)
+        super(Collector, self).__init__("https://premproxy.com/list/", 10)
 
 
 class CollectorSocksList(BaseCollectorPremProxyCom):
@@ -67,5 +70,5 @@ class CollectorSocksList(BaseCollectorPremProxyCom):
 
     def __init__(self):
         super(CollectorSocksList, self).__init__(
-            "https://premproxy.com/socks-list/", 16
+            "https://premproxy.com/socks-list/", 10
         )

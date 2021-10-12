@@ -405,14 +405,11 @@ class Processor:
             proxy.number_of_bad_checks = 0
             proxy.last_check_time = int(time.time())
 
-            if additional_info is not None:
-                if additional_info.ipv4 is not None:
-                    proxy.white_ipv4 = additional_info.ipv4
+            if additional_info is not None and additional_info.ipv4 is not None:
+                proxy.white_ipv4 = additional_info.ipv4
 
             checking_time = int(end_checking_time - start_checking_time)
-            if checking_time > settings.PROXY_CHECKING_TIMEOUT:
-                checking_time = settings.PROXY_CHECKING_TIMEOUT
-
+            checking_time = min(checking_time, settings.PROXY_CHECKING_TIMEOUT)
             proxy.checking_period = settings.MIN_PROXY_CHECKING_PERIOD + (
                 checking_time / settings.PROXY_CHECKING_TIMEOUT
             ) * (

@@ -30,11 +30,15 @@ def retrieve(proxy) -> tuple:
         str_proxy += domain + ":" + port
         return retrieve(str_proxy)
     else:
-        raise ValidationError('Bad type. Type is "{}"'.format(type(proxy), proxy))
+        raise ValidationError('Bad type. Type is "{}"'.format(type(proxy)))
 
-    if protocol is not None:
-        if protocol not in ("socks", "socks4", "socks5", "http"):
-            raise ValidationError("Bad protocol")
+    if protocol is not None and protocol not in (
+        "socks",
+        "socks4",
+        "socks5",
+        "http",
+    ):
+        raise ValidationError("Bad protocol")
 
     if auth_data is None:
         auth_data = ""

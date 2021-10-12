@@ -156,10 +156,13 @@ Loading from the environment
 def load_settings_from_environment():
     for key, val in globals().items():
         # filter only variables with capital letters or digits or undescore
-        rest = "".join(ch for ch in key
-                        if ch not in string.ascii_uppercase
-                        and ch not in string.digits
-                        and ch != "_")
+        rest = "".join(
+            ch
+            for ch in key
+            if ch not in string.ascii_uppercase
+            and ch not in string.digits
+            and ch != "_"
+        )
         if len(rest) > 0:
             continue
 
@@ -168,12 +171,10 @@ def load_settings_from_environment():
             env_value = os.environ[env_key]
             try:
                 globals()[key] = ast.literal_eval(env_value)
-            except:
+            except Exception:
                 raise Exception(
-                    (
-                        'An error happened during parsing environment value. '
-                        + f"Key = {env_key}, Value = {env_value}"
-                    )
+                    "An error happened during parsing environment value. "
+                    + f"Key = {env_key}, Value = {env_value}"
                 )
 
 
