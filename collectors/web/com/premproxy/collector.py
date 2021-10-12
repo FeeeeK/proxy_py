@@ -31,13 +31,18 @@ class BaseCollectorPremProxyCom(PagesCollector):
         code_table = (
             await async_requests.get("https://premproxy.com" + code_table_url)
         ).text.replace("eval", "")
-        ports_code_table = {
-            match[0]: match[1]
-            for match in re.findall(
-                r"\$\('.([a-z0-9]+)'\)\.html\(([0-9]+)\)",
-                js2py.eval_js(code_table),
-            )
-        }
+        try:
+            ports_code_table = {
+                match[0]: match[1]
+                for match in re.findall(
+                    r"\$\('.([a-z0-9]+)'\)\.html\(([0-9]+)\)",
+                    js2py.eval_js(code_table),
+                )
+            }
+        except js2py.PyJsException:
+            self.pages_count = page_index - 1
+            self.current_page = 0
+            return []
         for el in elements:
             element_html = str(etree.tostring(el))
             address, port = re.search(
@@ -62,13 +67,11 @@ class Collector(BaseCollectorPremProxyCom):
     __collector__ = True
 
     def __init__(self):
-        super(Collector, self).__init__("https://premproxy.com/list/", 10)
+        super(Collector, self).__init__("https://premproxy.com/list/", 2)
 
 
 class CollectorSocksList(BaseCollectorPremProxyCom):
     __collector__ = True
 
     def __init__(self):
-        super(CollectorSocksList, self).__init__(
-            "https://premproxy.com/socks-list/", 10
-        )
+        super(CollectorSocksList, self).__init__("https://premproxy.com/socks-list/", 2)
