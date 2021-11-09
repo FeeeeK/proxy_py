@@ -9,5 +9,3 @@ RUN pip install -r requirements.txt --no-cache-dir
 RUN echo "Building proxy_py..."
 COPY . /proxy_py/
 RUN cp config_examples/settings.py proxy_py/settings.py
-
-EXPOSE 55555

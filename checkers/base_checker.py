@@ -93,12 +93,12 @@ class BaseChecker:
             aiohttp.ClientProxyConnectionError,
             aiohttp.ClientResponseError,
             aiohttp.ClientPayloadError,
-            aiohttp.ConnectionResetError,
+            aiohttp.ClientOSError,
+            ConnectionResetError,
             aiosocks.errors.SocksError,
             aiosocks.SocksError,
             asyncio.TimeoutError,
             ssl.CertificateError,
-            aiohttp.ClientOSError,
         ) as ex:
             message = str(ex).lower()
 
@@ -146,4 +146,4 @@ class BaseChecker:
         :param checker_result: fill this structure with information like ip address
         :return: whether proxy is working or not
         """
-        raise NotImplemented()
+        raise NotImplementedError()
