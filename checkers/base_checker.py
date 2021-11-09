@@ -93,6 +93,7 @@ class BaseChecker:
             aiohttp.ClientProxyConnectionError,
             aiohttp.ClientResponseError,
             aiohttp.ClientPayloadError,
+            aiohttp.ConnectionResetError,
             aiosocks.errors.SocksError,
             aiosocks.SocksError,
             asyncio.TimeoutError,
