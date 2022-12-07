@@ -46,11 +46,16 @@ def get_response_wrapper(template_name):
                 )
             )
 
+            pending_proxies_count = await db.count(
+                Proxy.select().where(Proxy.last_check_time == 0)
+            )
+
             response = {
                 "bad_proxies_count": bad_proxies_count,
                 "good_proxies_count": good_proxies_count,
                 "dead_proxies_count": dead_proxies_count,
                 "not_checked_proxies_count": not_checked_proxies_count,
+                "pending_proxies_count": pending_proxies_count,
             }
 
             response.update(await func(self, *args, **kwargs))

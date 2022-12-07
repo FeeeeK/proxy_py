@@ -8,7 +8,7 @@ def init_uvloop():
     uvloop.install()
 
 
-init_uvloop()
+# init_uvloop()
 
 import argparse
 import asyncio
@@ -151,6 +151,7 @@ def main():
     if len(sys.argv) < 2:
         # run default configuration
         # server
+        print("test")
         p = subprocess.Popen(["python3", sys.argv[0], "server"])
 
         # and core

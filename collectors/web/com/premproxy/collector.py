@@ -4,7 +4,7 @@ import async_requests
 import lxml.html
 from collectors.pages_collector import PagesCollector
 from lxml import etree
-import js2py
+import jsbeautifier.unpackers.packer as packer
 
 
 class BaseCollectorPremProxyCom(PagesCollector):
@@ -29,17 +29,17 @@ class BaseCollectorPremProxyCom(PagesCollector):
         code_table_url = re.findall(r'script src="(/js(-socks)?/.+?\.js)', html)[0][0]
 
         code_table = (
-            await async_requests.get("https://premproxy.com" + code_table_url)
-        ).text.replace("eval", "")
-        try:
+            await async_requests.get(f"https://premproxy.com{code_table_url}")
+        ).text
+
+        if packer.detect(code_table):
             ports_code_table = {
                 match[0]: match[1]
                 for match in re.findall(
-                    r"\$\('.([a-z0-9]+)'\)\.html\(([0-9]+)\)",
-                    js2py.eval_js(code_table),
+                    r"\$\('.([a-z0-9]+)'\)\.html\(([0-9]+)\)", packer.unpack(code_table)
                 )
             }
-        except js2py.PyJsException:
+        else:
             self.pages_count = page_index - 1
             self.current_page = 0
             return []
@@ -53,11 +53,10 @@ class BaseCollectorPremProxyCom(PagesCollector):
                 port = ports_code_table[port]
             except KeyError as ex:
                 raise Exception(
-                    "symbol is not present in code table: {}. address: {}".format(
-                        str(ex), address
-                    )
-                )
-            proxy = "{}:{}".format(address, port)
+                    f"symbol is not present in code table: {str(ex)}. address: {address}"
+                ) from ex
+
+            proxy = f"{address}:{port}"
             result.append(proxy)
 
         return result

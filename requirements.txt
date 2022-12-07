@@ -1,15 +1,14 @@
-aiohttp
+aiohttp>=3
 aiohttp-jinja2
 aiosocks @ https://github.com/nibrag/aiosocks/archive/refs/heads/master.zip
 lxml
 fake-useragent @ https://github.com/Jordan9675/fake-useragent/archive/refs/heads/master.zip
 jinja2
-peewee-async==0.5.12
-aiopg==0.16.0
+peewee-async
+aiopg
 recommonmark
 sphinx_rtd_theme
 sphinx
-js2py
 pytest
 pytest-asyncio
 termcolor

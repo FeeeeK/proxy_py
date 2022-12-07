@@ -32,7 +32,7 @@ class ProxyProviderServer(BaseApp):
         self._request_number = 0
 
     def start(self, loop):
-        web.run_app(self.init(), host=self.host, port=self.port)
+        web.run_app(self.init(), host=self.host, port=self.port, loop=loop)
 
     async def setup_router(self):
         api_v1_app = ApiV1App(logger=self.logger)
@@ -73,7 +73,7 @@ class ProxyProviderServer(BaseApp):
         if request.body_exists:
             request_data["body"] = (await request.read()).decode()
 
-        self.log_info(request, "-> data={}".format(json.dumps(request_data)))
+        self.log_info(request, f"-> data={json.dumps(request_data)}")
 
         status_code = None
         exc = None
@@ -84,10 +84,10 @@ class ProxyProviderServer(BaseApp):
         except web.HTTPException as ex:
             status_code = ex.status
             exc = ex
-            raise ex
+            raise exc from exc
         except BaseException as ex:
             exc = ex
-            raise ex
+            raise exc from exc
         finally:
             self.log_info(
                 request,
@@ -110,10 +110,9 @@ class ProxyProviderServer(BaseApp):
             try:
                 response = await handler(request)
                 override = overrides.get(response.status)
-                if override is None:
-                    return response
-                else:
-                    return await override(request, response)
+                return (
+                    response if override is None else await override(request, response)
+                )
             except aiohttp.web.HTTPException as ex:
                 override = overrides.get(ex.status)
                 if override is None:
