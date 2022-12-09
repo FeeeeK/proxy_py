@@ -1,29 +1,31 @@
-version: '3.7'
+version: "3.7"
 
 services:
-    db:
-        image: postgres:13-alpine
-        container_name: proxy_py_db
-        restart: always
-        environment:
-            - POSTGRES_USER=proxy_py
-            - POSTGRES_PASSWORD=proxy_py
-            - POSTGRES_DB=proxy_py
-        volumes:
-            - db_data:/var/lib/postgresql/data
-    core:
-        image: proxy_py
-        build: .
-        container_name: proxy_py
-        command: ./run.sh
-        restart: always
-        ports:
-            - "0.0.0.0:55555:55555"
-        environment:
-            - PROXY_PY_PROXY_PROVIDER_SERVER_ADDRESS={'HOST':'0.0.0.0','PORT':55555}
-            - PROXY_PY_DATABASE_CONNECTION_KWARGS={'host':'db','database':'proxy_py','user':'proxy_py','password':'proxy_py'}
-        depends_on:
-            - db
+  db:
+    image: postgres:13-alpine
+    container_name: proxy_py_db
+    restart: always
+    environment:
+      - POSTGRES_USER=proxy_py
+      - POSTGRES_PASSWORD=proxy_py
+      - POSTGRES_DB=proxy_py
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  core:
+    image: proxy_py
+    build: .
+    container_name: proxy_py
+    command: ./run.sh
+    restart: always
+    ports:
+      - "0.0.0.0:55555:55555"
+    environment:
+      - PROXY_PY_PROXY_PROVIDER_SERVER_ADDRESS={'HOST':'0.0.0.0','PORT':55555}
+      - PROXY_PY_DATABASE_CONNECTION_KWARGS={'host':'db','database':'proxy_py','user':'proxy_py','password':'proxy_py'}
+    env_file:
+      - .env
+    depends_on:
+      - db
 
 volumes:
-    db_data:
+  db_data:

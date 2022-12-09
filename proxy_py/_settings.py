@@ -163,19 +163,19 @@ def load_settings_from_environment():
             and ch not in string.digits
             and ch != "_"
         )
-        if len(rest) > 0:
+        if rest != "":
             continue
 
-        env_key = "PROXY_PY_" + key
+        env_key = f"PROXY_PY_{key}"
         if env_key in os.environ:
             env_value = os.environ[env_key]
             try:
                 globals()[key] = ast.literal_eval(env_value)
-            except Exception:
+            except Exception as e:
                 raise Exception(
                     "An error happened during parsing environment value. "
                     + f"Key = {env_key}, Value = {env_value}"
-                )
+                ) from e
 
 
 load_settings_from_environment()
