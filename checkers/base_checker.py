@@ -2,7 +2,7 @@ import asyncio
 import ssl
 
 import aiohttp
-from aiohttp_socks import SocksError, ProxyConnector
+from aiohttp_socks import ProxyError, ProxyConnector, ProxyConnectionError
 import async_requests
 from proxy_py import settings
 
@@ -73,7 +73,8 @@ class BaseChecker:
             aiohttp.ClientPayloadError,
             aiohttp.ClientOSError,
             ConnectionResetError,
-            SocksError,
+            ProxyConnectionError,
+            ProxyError,
             asyncio.TimeoutError,
             ssl.CertificateError,
         ) as ex:
