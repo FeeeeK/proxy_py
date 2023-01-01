@@ -66,6 +66,7 @@ class BaseChecker:
         try:
             return await self._request(proxy_address, timeout)
         except (
+            asyncio.IncompleteReadError,
             aiohttp.ServerDisconnectedError,
             aiohttp.ClientHttpProxyError,
             aiohttp.ClientProxyConnectionError,
