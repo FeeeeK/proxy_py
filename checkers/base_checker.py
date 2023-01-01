@@ -2,9 +2,9 @@ import asyncio
 import ssl
 
 import aiohttp
-import aiosocks
-from aiosocks.connector import ProxyClientRequest, ProxyConnector
 
+from aiosocks.connector import ProxyClientRequest, ProxyConnector
+from aiohttp_socks import ProxyConnector
 import async_requests
 from proxy_py import settings
 
@@ -128,7 +128,6 @@ class BaseChecker:
             async with session.request(
                 self.request_type,
                 self.url,
-                proxy=proxy_address,
                 timeout=timeout,
                 headers=headers,
             ) as response:

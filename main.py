@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 
-# should be called before everything else
-# it's very fucking important!
+import contextlib
+
+
 def init_uvloop():
     import uvloop
 
     uvloop.install()
 
 
-# init_uvloop()
+with contextlib.suppress(ImportError):
+    init_uvloop()
 
 import argparse
 import asyncio

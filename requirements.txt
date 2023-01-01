@@ -1,8 +1,8 @@
 aiohttp>=3
 aiohttp-jinja2
-aiosocks @ https://github.com/nibrag/aiosocks/archive/refs/heads/master.zip
+aiohttp-socks
 lxml
-fake-useragent @ https://github.com/Jordan9675/fake-useragent/archive/refs/heads/master.zip
+fake-useragent
 jinja2
 peewee-async
 aiopg

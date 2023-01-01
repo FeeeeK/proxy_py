@@ -1,7 +1,8 @@
 import json
 
 import aiohttp
-from aiosocks.connector import ProxyClientRequest, ProxyConnector
+from aiohttp_socks import ProxyConnector
+from fake_useragent import UserAgent
 
 
 async def get(url, **kwargs):
@@ -19,9 +20,8 @@ async def post(url, data, **kwargs):
 
 async def request(method, url, **kwargs):
     session_kwargs = {}
-    if "proxy" in kwargs and kwargs["proxy"].startswith("socks"):
-        session_kwargs["connector"] = ProxyConnector(remote_resolve=False)
-        session_kwargs["request_class"] = ProxyClientRequest
+    if "proxy" in kwargs:
+        session_kwargs["connector"] = ProxyConnector.from_url(kwargs["proxy"])
 
     if "cookies" in kwargs:
         session_kwargs["cookies"] = kwargs["cookies"]
@@ -72,8 +72,10 @@ class Response:
     __repr__ = __str__
 
 
+useragent = UserAgent()
+
+
 def get_random_user_agent():
-    return "Mozilla/5.0 (Windows NT;) Gecko/20100101 Firefox/58.0"
+    # return "Mozilla/5.0 (Windows NT;) Gecko/20100101 Firefox/58.0"
     # return 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0'
-    # TODO: do it
-    # return UserAgent().random
+    return useragent.random
