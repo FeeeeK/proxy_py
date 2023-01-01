@@ -1,7 +1,7 @@
 import json
 
 import aiohttp
-from aiohttp_socks import ProxyConnector
+from aiosocks.connector import ProxyClientRequest, ProxyConnector
 from fake_useragent import UserAgent
 
 
@@ -20,8 +20,9 @@ async def post(url, data, **kwargs):
 
 async def request(method, url, **kwargs):
     session_kwargs = {}
-    if "proxy" in kwargs:
-        session_kwargs["connector"] = ProxyConnector.from_url(kwargs["proxy"])
+    if "proxy" in kwargs and kwargs["proxy"].startswith("socks"):
+        session_kwargs["connector"] = ProxyConnector(remote_resolve=False)
+        session_kwargs["request_class"] = ProxyClientRequest
 
     if "cookies" in kwargs:
         session_kwargs["cookies"] = kwargs["cookies"]
