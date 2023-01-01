@@ -1,7 +1,7 @@
 import json
 
 import aiohttp
-from aiosocks.connector import ProxyClientRequest, ProxyConnector
+from aiohttp_socks import ProxyConnector
 from fake_useragent import UserAgent
 
 from proxy_py import settings
@@ -26,6 +26,9 @@ class HttpClientResult:
         return json.loads(self.text)
 
 
+user_agent = UserAgent()
+
+
 # TODO: complete cookies saving
 class HttpClient:
     """
@@ -33,17 +36,9 @@ class HttpClient:
     user-agent is set to random one in constructor
     """
 
-    _aiohttp_connector = None
-
     def __init__(self):
-        self.user_agent = UserAgent().random
+        self.user_agent = user_agent.random
         self.timeout = 60
-        if HttpClient._aiohttp_connector is None:
-            HttpClient._aiohttp_connector = ProxyConnector(
-                remote_resolve=True,
-                limit=settings.NUMBER_OF_SIMULTANEOUS_REQUESTS,
-                limit_per_host=settings.NUMBER_OF_SIMULTANEOUS_REQUESTS_PER_HOST,
-            )
         self.proxy_address = None
 
     async def get(self, url):
@@ -71,23 +66,17 @@ class HttpClient:
         }
 
         async with aiohttp.ClientSession(
-            connector=HttpClient._aiohttp_connector,
+            connector=ProxyConnector.from_url(self.proxy_address),
             connector_owner=False,
-            request_class=ProxyClientRequest,
         ) as session:
             async with session.request(
                 method,
                 url=url,
                 data=data,
-                proxy=self.proxy_address,
                 timeout=self.timeout,
                 headers=headers,
             ) as response:
                 return await HttpClientResult.make(response)
-
-    @staticmethod
-    async def clean():
-        HttpClient._aiohttp_connector.close()
 
 
 async def get_text(url):

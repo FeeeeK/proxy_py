@@ -104,7 +104,6 @@ async def core():
                 materialized_view_updater.worker(),
             ]
         )
-        BaseChecker.clean()
         return code
     except KeyboardInterrupt:
         pass

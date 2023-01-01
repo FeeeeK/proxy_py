@@ -45,7 +45,6 @@ async def main():
 
     await asyncio.gather(*tasks)
     print()
-    BaseChecker.clean()
 
 
 if __name__ == "__main__":

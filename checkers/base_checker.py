@@ -2,8 +2,7 @@ import asyncio
 import ssl
 
 import aiohttp
-import aiosocks
-from aiosocks.connector import ProxyClientRequest, ProxyConnector
+from aiohttp_socks import SocksError, ProxyConnector
 import async_requests
 from proxy_py import settings
 
@@ -36,15 +35,8 @@ class CheckerResult:
 
 class BaseChecker:
     # TODO: rewrite using HttpClient
-    aiohttp_connector = None
 
     def __init__(self, url=None, request_type="GET", timeout=None):
-        if BaseChecker.aiohttp_connector is None:
-            BaseChecker.aiohttp_connector = ProxyConnector(
-                remote_resolve=True,
-                limit=settings.NUMBER_OF_SIMULTANEOUS_REQUESTS,
-                limit_per_host=settings.NUMBER_OF_SIMULTANEOUS_REQUESTS_PER_HOST,
-            )
         self.request_type = request_type
         self.timeout = (
             timeout if timeout is not None else settings.PROXY_CHECKING_TIMEOUT
@@ -58,19 +50,6 @@ class BaseChecker:
 
         :return:
         """
-
-    @staticmethod
-    def get_aiohttp_connector():
-        return BaseChecker.aiohttp_connector
-
-    @staticmethod
-    def clean():
-        """
-        Should be called at the end of the program
-
-        :return:
-        """
-        BaseChecker.aiohttp_connector.close()
 
     async def check(self, proxy_address: str, timeout: int = None) -> tuple:
         """
@@ -94,8 +73,7 @@ class BaseChecker:
             aiohttp.ClientPayloadError,
             aiohttp.ClientOSError,
             ConnectionResetError,
-            aiosocks.errors.SocksError,
-            aiosocks.SocksError,
+            SocksError,
             asyncio.TimeoutError,
             ssl.CertificateError,
         ) as ex:
@@ -119,10 +97,10 @@ class BaseChecker:
             raise Exception()
 
         headers = {"User-Agent": async_requests.get_random_user_agent()}
-        conn = BaseChecker.get_aiohttp_connector()
+        conn = ProxyConnector.from_url(proxy_address)
 
         async with aiohttp.ClientSession(
-            connector=conn, connector_owner=False, request_class=ProxyClientRequest
+            connector=conn,
         ) as session:
             async with session.request(
                 self.request_type,
