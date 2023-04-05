@@ -195,6 +195,12 @@ class Processor:
             tasks = []
             number_of_proxies = 0
             async for proxy in collector._collect():
+                if proxy is None:
+                    logger.warning(
+                        "got None proxy from collector of type {}".format(
+                            type(collector)
+                        )
+                    )
                 number_of_proxies += 1
                 tasks.append(self.process_raw_proxy(proxy, collector_state.id))
 
