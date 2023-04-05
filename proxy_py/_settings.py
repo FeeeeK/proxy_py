@@ -17,6 +17,8 @@ from checkers.google_com_checker import GoogleComChecker
 DEBUG = False
 LOG_FORMAT_STRING = "%(levelname)s ~ [%(name)s] ~ %(asctime)s ~ %(funcName)30s():L%(lineno)d - %(message)s"
 
+CRAWLER_MACHINE_IP = ""
+CRAWLER_MACHINE_PROXY = ""
 
 """
 Database settings (do not try to change after creation of the database)
@@ -83,7 +85,7 @@ NUMBER_OF_CONCURRENT_COLLECTORS = 1
 MINIMUM_NUMBER_OF_CHECKERS_PER_PROXY = 1
 
 PROXY_CHECKERS = [
-    GoogleComChecker,
+    GoogleComChecker, # TODO add checkers
 ]
 
 

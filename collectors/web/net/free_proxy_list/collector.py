@@ -1,7 +1,6 @@
+import async_requests
 import lxml.etree
 import lxml.html
-
-import async_requests
 from collectors.abstract_collector import AbstractCollector
 
 
@@ -16,8 +15,7 @@ class BaseCollectorFreeProxyListNet(AbstractCollector):
         res = await async_requests.get(self.url)
         html = res.text
         tree = lxml.html.fromstring(html)
-        table_element = tree.xpath('//div[contains(@class, "fpl-list")]/table')[0]
-        rows = table_element.xpath(".//tbody/tr")
+        rows = tree.xpath('//div[contains(@class, "fpl-list")]/table/tbody/tr')[0]
         for row in rows:
             try:
                 ip = row.xpath(".//td")[0].text

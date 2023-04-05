@@ -279,6 +279,16 @@ class Processor:
 
             await self.add_proxy_to_queue(new_proxy, collector_id)
 
+    # TODO use if necessary
+    @staticmethod
+    def if_ip_safe(checking_result_ip):
+        if (
+            checking_result_ip.find(settings.CRAWLER_MACHINE_IP) != -1
+            or checking_result_ip.find(settings.CRAWLER_MACHINE_PROXY) != -1
+        ):
+            return False
+        return True
+
     async def process_proxy(
         self, raw_protocol: int, auth_data: str, domain: str, port: int, collector_id
     ):
@@ -304,6 +314,7 @@ class Processor:
             )
             end_checking_time = time.time()
 
+            # TODO rebuild conditions using if_ip_safe if needed
             if check_result:
                 self.logger.debug("proxy {0} works".format(proxy_url))
                 await self.create_or_update_proxy(
@@ -380,6 +391,7 @@ class Processor:
             # peewee.IntegrityError: duplicate key value violates unique constraint
             # "proxies_raw_protocol_auth_data_domain_port"
 
+            # ANCHOR creating a proxy object + db analog
             proxy, was_created = await db.get_or_create(
                 Proxy,
                 raw_protocol=raw_protocol,
