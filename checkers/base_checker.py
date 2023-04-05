@@ -2,8 +2,8 @@ import asyncio
 import ssl
 
 import aiohttp
-from aiohttp_socks import ProxyError, ProxyConnector, ProxyConnectionError
 import async_requests
+from aiohttp_socks import ProxyConnectionError, ProxyConnector, ProxyError
 from proxy_py import settings
 
 
@@ -104,13 +104,13 @@ class BaseChecker:
 
         async with aiohttp.ClientSession(
             connector=conn,
-            ssl=False,
         ) as session:
             async with session.request(
                 self.request_type,
                 self.url,
                 timeout=timeout,
                 headers=headers,
+                ssl=False,
             ) as response:
                 is_working = await self.validate(response, checker_result)
 
