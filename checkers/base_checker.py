@@ -103,6 +103,7 @@ class BaseChecker:
 
         async with aiohttp.ClientSession(
             connector=conn,
+            ssl=False,
         ) as session:
             async with session.request(
                 self.request_type,
