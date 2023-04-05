@@ -3,8 +3,6 @@ import re
 import sys
 import time
 
-from termcolor import colored
-
 import proxy_utils
 import proxy_validator
 from collectors_list import collectors
@@ -50,6 +48,8 @@ proxies_semaphore = asyncio.BoundedSemaphore(settings.NUMBER_OF_CONCURRENT_TASKS
 
 
 async def process_proxy(proxy_url: str):
+    from termcolor import colored
+
     async with proxies_semaphore:
         try:
             _, auth_data, domain, port = proxy_validator.retrieve(proxy_url)
