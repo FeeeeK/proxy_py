@@ -78,6 +78,7 @@ class BaseChecker:
             ProxyError,
             asyncio.TimeoutError,
             ssl.CertificateError,
+            ssl.SSLError,
         ) as ex:
             message = str(ex).lower()
 
