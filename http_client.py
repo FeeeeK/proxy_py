@@ -4,8 +4,6 @@ import aiohttp
 from aiohttp_socks import ProxyConnector
 from fake_useragent import UserAgent
 
-from proxy_py import settings
-
 
 class HttpClientResult:
     text = None
@@ -64,11 +62,11 @@ class HttpClient:
         headers = {
             "User-Agent": self.user_agent,
         }
-
-        async with aiohttp.ClientSession(
-            connector=ProxyConnector.from_url(self.proxy_address),
-            connector_owner=False,
-        ) as session:
+        if self.proxy_address:  # noqa: SIM108
+            connector = ProxyConnector.from_url(self.proxy_address)
+        else:
+            connector = None
+        async with aiohttp.ClientSession(connector=connector) as session:
             async with session.request(
                 method,
                 url=url,
