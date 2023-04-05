@@ -120,8 +120,8 @@ class Collector(PagesCollector):
             try:
                 tree = lxml.html.fromstring(text)
                 table_element = tree.xpath(".//table[@class='DataGrid']")[0]
-            except BaseException:
-                raise Exception("table not found: {}".format(text))
+            except:
+                raise ValueError("table not found: {}".format(text))
 
             rows = table_element.xpath(".//tr")
             for row in rows:

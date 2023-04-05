@@ -3,8 +3,8 @@ import re
 import async_requests
 import lxml.html
 from collectors.pages_collector import PagesCollector
+from jsbeautifier.unpackers import packer
 from lxml import etree
-import jsbeautifier.unpackers.packer as packer
 
 
 class BaseCollectorPremProxyCom(PagesCollector):
