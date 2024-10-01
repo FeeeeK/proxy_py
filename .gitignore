@@ -12,3 +12,5 @@ build/
 local/
 .pytest_cache
 .env
+docker-compose.override.yml
+compose.override.yml
